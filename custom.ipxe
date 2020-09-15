@@ -3,10 +3,21 @@
 ### netboot.xyz-custom menu
 ###
 
-:start
-echo Hello world!
-sleep 10
+:custom
+clear custom_choice
+menu Custom
+item --gap This is the first sub menu
+item memtest ${space} MemTest86+ ISO
+choose custom_choice || goto custom_exit
+echo ${cls}
+goto ${custom_choice}
 goto custom_exit
 
+:memtest
+kernel https://boot.netboot.xyz/memdisk raw iso
+initrd https://github.com/grumpydev/netboot.xyz-custom/raw/master/mt531b.iso
+boot || goto custom_exit
+
 :custom_exit
-exit 0
+chain utils.ipxe
+exit
